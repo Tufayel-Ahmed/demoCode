@@ -1,0 +1,165 @@
+<div *ngIf="billSettings" class="row mm-5px pbp-20px">
+    <div class="col-sm-12" style="margin-top: 10px">
+      <form [formGroup]="approvalForm">
+        <div class="row">
+          <div class="col-sm-9">
+            <label
+              style="font-weight: bold; margin-top: 20px; margin-left: 14px"
+              >Bill Approval Settings</label
+            >
+          </div>
+          <div class="col-sm-3">
+            <button
+              type="button"
+              (click)="addBlankLevel()"
+              class="eCount-def-btn ml-3"
+            >
+              Add Level
+            </button>
+            <button type="button" (click)="save()" class="eCount-def-btn ml-3">
+              Save
+            </button>
+          </div>
+        </div>
+        <div formArrayName="ApprovalLevel">
+          <div
+            *ngFor="
+              let level of ApprovalLevel().controls;
+              let levelIndex = index
+            "
+          >
+            <div [formGroupName]="levelIndex">
+              <input
+                style="font-weight: bold; color: black; margin-left: 5px"
+                readonly
+                class="form-control noBorder"
+                type="text"
+                disabled
+                formControlName="LevelName"
+              />
+
+              <!-- this code is just commented out do not remove this
+              <button (click)="removeLevel(levelIndex)">Remove</button> -->
+
+              <div class="d-flex">
+                <div class="col-md-2">Approvers</div>
+                <div class="col-md-3">Email</div>
+                <div style="margin-left: 5px" class="col-md-2">Modified By</div>
+                <div style="margin-left: 5px" class="col-md-2">Modified At</div>
+              </div>
+              <div formArrayName="ApprovalLevelItem">
+                <div
+                  *ngFor="
+                    let item of levelItems(levelIndex).controls;
+                    let itemIndex = index
+                  "
+                >
+                  <div class="invoiceGridItemRow d-block pb-1">
+                    <div
+                      style="margin-left: 0px; margin-top: 2px"
+                      class="row"
+                      [formGroupName]="itemIndex"
+                    >
+                      <div class="col-md-2 margin-top-5">
+                        <ng-select
+                          [items]="approverRoleList"
+                          [clearable]="false"
+                          bindLabel="Name"
+                          bindValue="Id"
+                          (change)="ChangeEmailByRole (item,itemIndex,levelIndex)"
+                          formControlName="ApproverId"
+                        ></ng-select>
+                      </div>
+                      <div class="col-md-3 margin-top-5">
+                        <ng-select
+                          [items]="approverEmailList"
+                          [clearable]="false"
+                          bindLabel="Name"
+                          [searchable]="false"
+                          bindValue="Id"
+                          (change)="changeApproveIfRoleChange(item,itemIndex,levelIndex)"
+                          formControlName="ApproverEmailId"
+                        ></ng-select>
+                      </div>
+                      <div class="col-md-2 margin-top-5">
+                        <input
+                          class="form-control"
+                          readonly
+                          formControlName="ModifiedById"
+                        />
+                      </div>
+                      <div class="col-md-2 margin-top-5">
+                        <input
+                          class="form-control"
+                          readonly
+                          formControlName="ModifiedAt"
+                        />
+                      </div>
+
+                      <div
+                        class="col-md-2 margin-top-5 d-flex"
+                        *ngIf="
+                          levelIndex > 0 || (levelIndex == 0 && itemIndex > 0)
+                        "
+                      >
+                        <div style="padding: 7px 10px; color: #c7c2c2">
+                          <div class="dropdown mr-4">
+                            <div
+                              role="button"
+                              data-toggle="dropdown"
+                              aria-haspopup="false"
+                              aria-expanded="false"
+                            >
+                              <i class="icon-more float-right"></i>
+                            </div>
+                            <div
+                              class="dropdown-menu"
+                              aria-labelledby="navbarDropdown"
+                              style="width: 100%; cursor: pointer"
+                            >
+                              <div
+                                class="productRow pb-2"
+                                (click)="
+                                  removeLevelItem(levelIndex, itemIndex, item)
+                                "
+                              >
+                                <span class="lead1 ml-4">Delete</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row addItem">
+                <div class="BottomAddItem">
+                  <div class="dropdown mr-4">
+                    <a
+                      class="nav-link"
+                      style="background-color: white"
+                      href="#"
+                      id="navbarDropdown"
+                      role="button"
+                      data-toggle="dropdown"
+                      aria-haspopup="false"
+                      aria-expanded="false"
+                      (click)="addBlankLevelItem(levelIndex)"
+                    >
+                      <img
+                        style="height: 30px"
+                        class="languageImg"
+                        src="../../../assets/image/addIcon.png"
+                      />
+                      Add New Approver
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
